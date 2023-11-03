@@ -40,6 +40,7 @@ class Dom2pdf {
       this.callback = callback
 
       this.configCanvas(this.fileH)
+
     } else {
       throw Error('请选择要导出的dom元素!')
     }
