@@ -1,19 +1,12 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import axios from '@/utils/http/axios.js'
-// import html2canvas from 'html2canvas'
-// import { jsPDF } from 'jspdf'
+
 import Dom2pdf from '@/utils/dom2pdf/index.js'
 // 数据源
 const list = ref([])
 
 const fileW = 320
-// 最大渲染高度
-const maxHeight = 30000
-
-const domScale = reactive({
-  h: 1,
-})
 
 // dom
 const wrapperRef = ref()

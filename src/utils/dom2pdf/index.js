@@ -47,6 +47,10 @@ class Dom2pdf {
 
   }
 
+  /**
+   * 配置自定义的参数到当前类
+   * @param {Object} config 对象
+   */
   configKey (config) {
     for (const key in config) {
       if (Object.hasOwnProperty.call(config, key)) {
@@ -153,9 +157,8 @@ class Dom2pdf {
         )
         leftHeight -= pageHeight
         position -= A4.h
-        if (leftHeight > 0) {
-          pdf.addPage()
-        }
+
+        leftHeight > 0 && pdf.addPage()
       }
     }
     pdf.save(this.title)
