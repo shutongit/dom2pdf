@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import axios from '@/utils/http/axios.js'
 
 import Dom2pdf from '@/utils/dom2pdf/index.js'
+
 // 数据源
 const list = ref([])
 
@@ -17,7 +18,7 @@ const wrapperRef = ref()
 function handleDown() {
   const height = wrapperRef.value.clientHeight
 
-  const n = new Dom2pdf(
+  new Dom2pdf(
     wrapperRef.value,
 
     { fileW: fileW, fileH: height },
@@ -26,7 +27,6 @@ function handleDown() {
       console.log('msg: ', msg)
     }
   )
-  console.log('n: ', n)
 }
 
 /**
@@ -35,7 +35,7 @@ function handleDown() {
 async function loadData() {
   const param = {
     page: 4,
-    limit: 400,
+    limit: 100,
   }
   try {
     const res = await axios({
@@ -45,7 +45,7 @@ async function loadData() {
     })
     list.value = res || []
     list.value.push(...list.value)
-    list.value.push(...list.value)
+    // list.value.push(...list.value)
   } catch (error) {
     console.log('error: ', error)
   }
@@ -86,8 +86,9 @@ loadData()
 }
 .box img {
   width: 100%;
+  object-fit: contain;
 }
 .down {
-  position: absolute;
+  position: fixed;
 }
 </style>

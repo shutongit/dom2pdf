@@ -8,8 +8,6 @@ const A4 = { w: 595, h: 841.89 }
 // 渲染的缩放比例
 const domScale = { h: 1 }
 
-// 最大渲染
-const maxHeight = 30000
 
 // 默认配置
 const CONFIG = {
@@ -71,16 +69,20 @@ class Dom2pdf {
     canvasDom.style.width = this.fileW + 'px'
     canvasDom.style.height = h + 'px'
 
-    // 默认的高度缩放比例
-
-    canvasDom.width = this.fileW
-    if (maxHeight > h) {
-      canvasDom.height = h
-    } else {
-      // 根据实际高度和最大渲染高度来计算缩放
-      domScale.h = maxHeight / h
-      canvasDom.height = domScale.h * h
+    const defaultSize = { // html2canvas的width和height默认需要设置为style.width .height的2倍
+      w: this.fileW * 2,
+      h: h * 2
     }
+
+    canvasDom.width = defaultSize.w
+    canvasDom.height = defaultSize.h
+    if (this.maxHeight < h) {
+      // 根据实际高度和最大渲染高度来计算缩放
+      domScale.h = Math.min(this.maxHeight / h, 1)
+      canvasDom.height = domScale.h * defaultSize.h
+    }
+
+
     // 画板
     const ctx = canvasDom.getContext('2d')
     ctx.scale(1, domScale.h)
@@ -95,8 +97,10 @@ class Dom2pdf {
       backgroundColor: '#fff',
       canvas: c,
       useCORS: true,
+      imageTimeout: 30000
     }).then((canvas) => {
       // 获取canvas转url的数据
+      document.body.appendChild(canvas)
       let data = canvas.toDataURL()
       this.canvasToPdf(canvas, data)
     })
@@ -114,7 +118,7 @@ class Dom2pdf {
     let contentWidth = c.width
 
     // 获取画板的实际高度
-    let contentHeight = c.height / domScale.h
+    let contentHeight = parseFloat(c.style.height || c.height) //c.height / domScale.h
 
     // 获取在A4纸上每一页应该渲染的高度
     let pageHeight = A4.h
