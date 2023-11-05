@@ -24,15 +24,17 @@
     canvasDom.style.width = this.fileW + 'px'
     canvasDom.style.height = h + 'px'
 
-    // 默认的高度缩放比例
+    const defaultSize = { // html2canvas的width和height默认需要设置为style.width .height的window.devicePixelRatio倍
+      w: this.fileW * window.devicePixelRatio,
+      h: h * window.devicePixelRatio
+    }
 
-    canvasDom.width = this.fileW
-    if (maxHeight > h) {
-      canvasDom.height = h
-    } else {
+    canvasDom.width = defaultSize.w
+    canvasDom.height = defaultSize.h
+    if (this.maxHeight < h) {
       // 根据实际高度和最大渲染高度来计算缩放
-      domScale.h = maxHeight / h
-      canvasDom.height = domScale.h * h
+      domScale.h = Math.min(this.maxHeight / h, 1)
+      canvasDom.height = domScale.h * defaultSize.h
     }
 ```
 
