@@ -69,9 +69,9 @@ class Dom2pdf {
     canvasDom.style.width = this.fileW + 'px'
     canvasDom.style.height = h + 'px'
 
-    const defaultSize = { // html2canvas的width和height默认需要设置为style.width .height的2倍
-      w: this.fileW * 2,
-      h: h * 2
+    const defaultSize = { // html2canvas的width和height默认需要设置为style.width .height的window.devicePixelRatio倍
+      w: this.fileW * window.devicePixelRatio,
+      h: h * window.devicePixelRatio
     }
 
     canvasDom.width = defaultSize.w
